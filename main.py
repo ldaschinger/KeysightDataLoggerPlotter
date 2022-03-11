@@ -147,15 +147,13 @@ def analyzeLoggerData(filepath):
     return meanC*1000
 
 
-def analyzeTest(folderpath, bitrate, fps):
+def analyzeTest(folderpath, bitrate, fps, codec):
+
+    folderpath = folderpath + codec + "/"
+
     folderpath_small = folderpath + bitrate + "/" + bitrate + "_small_" + fps
     folderpath_large = folderpath + bitrate + "/" + bitrate + "_large_" + fps
     folderpath_auto = folderpath + bitrate + "/" + bitrate + "_auto"
-
-    # for a fixed number of csv files
-    # for i in range(4):
-    #     filepath = folderpath_small + "/" + "dlog" + str(i+1) + ".csv"
-    #     meanSmall.append(analyzeLoggerData(filepath))
 
     meanSmall = []
     # if we have varying number of tests and therefore .csv files available we must find all in the folder
@@ -185,12 +183,40 @@ def analyzeTest(folderpath, bitrate, fps):
           str(format(npMeanLarge.mean(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + "  " +
           str(format(npMeanAuto.mean(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")))
 
-    # # pass the filepath to the analysis function
-    # mean1 = analyzeLoggerData(args.folderpath + "dlog1.csv")
-    # mean2 = analyzeLoggerData(args.folderpath + "dlog2.csv")
-    # mean3 = analyzeLoggerData(args.folderpath + "dlog3.csv")
-    # mean4 = analyzeLoggerData(args.folderpath + "dlog4.csv")
-    # meanCurrents = np.array([mean1, mean2, mean3, mean4])
+
+def analyzeTestCustom(folderpath, bitrate, res1, fps1, codec1, res2, fps2, codec2, res3, fps3, codec3):
+
+    folderpath1 = folderpath + codec1 + "/" + bitrate + "/" + bitrate + res1 + fps1
+    folderpath2 = folderpath + codec2 + "/" + bitrate + "/" + bitrate + res2 + fps2
+    folderpath3 = folderpath + codec3 + "/" + bitrate + "/" + bitrate + res3 + fps3
+
+    mean1 = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath1):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            mean1.append(analyzeLoggerData(folderpath1 + "/" + filename))
+    npMean1 = np.asarray(mean1)
+
+    mean2 = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath2):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            mean2.append(analyzeLoggerData(folderpath2+ "/" + filename))
+    npMean2 = np.asarray(mean2)
+
+    mean3 = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath3):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            mean3.append(analyzeLoggerData(folderpath3 + "/" + filename))
+    npMean3= np.asarray(mean3)
+
+    print(str(format(npMean1.mean(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + "  " +
+          str(format(npMean2.mean(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + "  " +
+          str(format(npMean3.mean(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + " " + str(format(npMean3.std(), ".2f")))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -208,12 +234,51 @@ if __name__ == '__main__':
             dlog1.csv/dlog2.csv/dlog3.csv/dlog4.csv
     """
 
-    analyzeTest(args.folderpath, bitrate="300", fps="30")
-    analyzeTest(args.folderpath, bitrate="600", fps="30")
-    analyzeTest(args.folderpath, bitrate="900", fps="30")
-    analyzeTest(args.folderpath, bitrate="1300", fps="30")
-    analyzeTest(args.folderpath, bitrate="1800", fps="30")
-    analyzeTest(args.folderpath, bitrate="2700", fps="30")
-    analyzeTest(args.folderpath, bitrate="4000", fps="30")
-    analyzeTest(args.folderpath, bitrate="4750", fps="30")
-    analyzeTest(args.folderpath, bitrate="6000", fps="30")
+    # # 30fps tests
+    # analyzeTest(args.folderpath, bitrate="300", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="600", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="900", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="1300", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="1800", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="2700", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="4000", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="4750", fps="30", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="6000", fps="30", codec="H264")
+
+    # # 15fps tests
+    # analyzeTest(args.folderpath, bitrate="600", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="900", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="1300", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="1800", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="2700", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="4000", fps="15", codec="H264")
+    # analyzeTest(args.folderpath, bitrate="6000", fps="15", codec="H264")
+
+    # VP8 tests
+    # analyzeTest(args.folderpath, bitrate="900", fps="30", codec="VP8")
+    # analyzeTest(args.folderpath, bitrate="1800", fps="30", codec="VP8")
+    # analyzeTest(args.folderpath, bitrate="4000", fps="30", codec="VP8")
+    # analyzeTest(args.folderpath, bitrate="6000", fps="30", codec="VP8")
+
+    # VP8 vs H264 tests
+    analyzeTestCustom(args.folderpath, bitrate="900",
+                      res1="_small_", fps1="30", codec1="VP8",
+                      res2="_large_", fps2="30", codec2="VP8",
+                      res3="_auto_", fps3="30", codec3="VP8")
+    analyzeTestCustom(args.folderpath, bitrate="1800",
+                      res1="_small_", fps1="30", codec1="VP8",
+                      res2="_large_", fps2="30", codec2="VP8",
+                      res3="_auto_", fps3="30", codec3="VP8")
+    analyzeTestCustom(args.folderpath, bitrate="4000",
+                      res1="_small_", fps1="30", codec1="VP8",
+                      res2="_large_", fps2="30", codec2="VP8",
+                      res3="_auto_", fps3="30", codec3="VP8")
+    analyzeTestCustom(args.folderpath, bitrate="6000",
+                      res1="_small_", fps1="30", codec1="VP8",
+                      res2="_large_", fps2="30", codec2="VP8",
+                      res3="_auto_", fps3="30", codec3="VP8")
+
+# 393.97 1.70 1.70  395.17 1.83 1.83  528.60 6.01 6.01
+# 420.69 3.44 3.44  417.66 5.52 5.52  549.50 12.62 12.62
+# 469.42 6.64 6.64  516.00 0.63 0.63  634.53 20.53 20.53
+# 554.48 5.02 5.02  567.56 3.47 3.47  646.25 5.85 5.85
