@@ -151,60 +151,48 @@ def analyzeTestCustom(folderpath, bitrate, res1, fps1, codec1, res2="null", fps2
                       res3="null", fps3="null", codec3="null", res4="null", fps4="null", codec4="null",
                       res5="null", fps5="null", codec5="null"):
 
-    folderpath1 = folderpath + codec1 + "/" + bitrate + "/" + bitrate + res1 + fps1
-    folderpath2 = folderpath + codec2 + "/" + bitrate + "/" + bitrate + res2 + fps2
-    folderpath3 = folderpath + codec3 + "/" + bitrate + "/" + bitrate + res3 + fps3
-    folderpath4 = folderpath + codec4 + "/" + bitrate + "/" + bitrate + res4 + fps4
-    folderpath5 = folderpath + codec5 + "/" + bitrate + "/" + bitrate + res5 + fps5
+    settings = []
 
-    mean1 = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath1):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            mean1.append(analyzeLoggerData(folderpath1 + "/" + filename))
-    npMean1 = np.asarray(mean1)
+    dictlist = [dict() for x in range(5)]
+    dictlist[0] = {"res": res1, "fps": fps1, "codec": codec1}
+    dictlist[1] = {"res": res2, "fps": fps2, "codec": codec2}
+    dictlist[2] = {"res": res3, "fps": fps3, "codec": codec3}
+    dictlist[3] = {"res": res4, "fps": fps4, "codec": codec4}
+    dictlist[4] = {"res": res5, "fps": fps5, "codec": codec5}
 
-    mean2 = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath2):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            mean2.append(analyzeLoggerData(folderpath2+ "/" + filename))
-    npMean2 = np.asarray(mean2)
+    folderpaths = []
+    for i in range(5):
+        folderpaths.append(folderpath + dictlist[i].get("codec") + "/" + bitrate + "/" + bitrate + dictlist[i].get("res") + dictlist[i].get("fps"))
 
-    if res3 != "null":
-        mean3 = []
+    csvMeans = [[0 for x in range(0)] for y in range(5)]
+    for i in range(5):
         # if we have varying number of tests and therefore .csv files available we must find all in the folder
-        for filename in os.listdir(folderpath3):
-            name, extension = os.path.splitext(filename)
-            if extension == ".csv":
-                mean3.append(analyzeLoggerData(folderpath3 + "/" + filename))
-        npMean3 = np.asarray(mean3)
+        if dictlist[i].get("res") != "null":
+            for filename in os.listdir(folderpaths[i]):
+                name, extension = os.path.splitext(filename)
+                if extension == ".csv":
+                    csvMeans[i].append(analyzeLoggerData(folderpaths[i] + "/" + filename))
 
-    if res4 != "null":
-        mean4 = []
+    # # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    # for filename in os.listdir(folderpath1):
+    #     name, extension = os.path.splitext(filename)
+    #     if extension == ".csv":
+    #         mean1.append(analyzeLoggerData(folderpath1 + "/" + filename))
+    # npMean1 = np.asarray(mean1)
+
+    npMeans = [np.empty([5]) for x in range(5)]
+    for i in range(5):
         # if we have varying number of tests and therefore .csv files available we must find all in the folder
-        for filename in os.listdir(folderpath4):
-            name, extension = os.path.splitext(filename)
-            if extension == ".csv":
-                mean4.append(analyzeLoggerData(folderpath4 + "/" + filename))
-        npMean4= np.asarray(mean4)
+        if dictlist[i].get("res") != "null":
+            npMeans[i] = np.asarray(csvMeans[i])
 
-    if res5 != "null":
-        mean5 = []
+
+    for i in range(5):
         # if we have varying number of tests and therefore .csv files available we must find all in the folder
-        for filename in os.listdir(folderpath5):
-            name, extension = os.path.splitext(filename)
-            if extension == ".csv":
-                mean5.append(analyzeLoggerData(folderpath5 + "/" + filename))
-        npMean5= np.asarray(mean5)
+        if dictlist[i].get("res") != "null":
+            print(str(format(npMeans[i].mean(), ".2f")) + " " + str(format(npMeans[i].std(), ".2f")) + " " + str(format(npMeans[i].std(), ".2f")) + "  ", end="", flush=True)
 
-
-    print("Installing XXX...      ", end="", flush=True)
-    print("Installing XXX...      ", end="", flush=True)
-    print("Installing XXX...      ", end="", flush=True)
-    print("Installing XXX...      ")
+    print("\n")
     # print(str(format(npMean1.mean(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + "  " +
     #       str(format(npMean2.mean(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + "  " +
     #       str(format(npMean3.mean(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + "  " +
@@ -270,3 +258,8 @@ if __name__ == '__main__':
                       res1="_small_", fps1="30", codec1="VP8",
                       res2="_large_", fps2="30", codec2="VP8",
                       res3="_auto_", fps3="30", codec3="VP8")
+
+# 393.97 1.70 1.70  395.17 1.83 1.83  528.60 6.01 6.01
+# 420.69 3.44 3.44  417.66 5.52 5.52  549.50 12.62 12.62
+# 469.42 6.64 6.64  516.00 0.63 0.63  634.53 20.53 20.53
+# 554.48 5.02 5.02  567.56 3.47 3.47  646.25 5.85 5.85
