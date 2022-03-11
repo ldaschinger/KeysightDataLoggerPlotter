@@ -148,9 +148,9 @@ def analyzeLoggerData(filepath):
 
 
 def analyzeTest(folderpath, bitrate, fps):
-    folderpath_small = folderpath + bitrate + "_small_" + fps
-    folderpath_large = folderpath + bitrate + "_large_" + fps
-    folderpath_auto = folderpath + bitrate + "_auto"
+    folderpath_small = folderpath + bitrate + "/" + bitrate + "_small_" + fps
+    folderpath_large = folderpath + bitrate + "/" + bitrate + "_large_" + fps
+    folderpath_auto = folderpath + bitrate + "/" + bitrate + "_auto"
 
     # for a fixed number of csv files
     # for i in range(4):
@@ -159,7 +159,7 @@ def analyzeTest(folderpath, bitrate, fps):
 
     meanSmall = []
     # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath):
+    for filename in os.listdir(folderpath_small):
         name, extension = os.path.splitext(filename)
         if extension == ".csv":
             meanSmall.append(analyzeLoggerData(folderpath_small + "/" + filename))
@@ -167,7 +167,7 @@ def analyzeTest(folderpath, bitrate, fps):
 
     meanLarge = []
     # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath):
+    for filename in os.listdir(folderpath_large):
         name, extension = os.path.splitext(filename)
         if extension == ".csv":
             meanLarge.append(analyzeLoggerData(folderpath_large + "/" + filename))
@@ -175,7 +175,7 @@ def analyzeTest(folderpath, bitrate, fps):
 
     meanAuto = []
     # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath):
+    for filename in os.listdir(folderpath_auto):
         name, extension = os.path.splitext(filename)
         if extension == ".csv":
             meanAuto.append(analyzeLoggerData(folderpath_auto + "/" + filename))
@@ -210,5 +210,10 @@ if __name__ == '__main__':
 
     analyzeTest(args.folderpath, bitrate="300", fps="30")
     analyzeTest(args.folderpath, bitrate="600", fps="30")
-    # analyzeTest(args.folderpath, bitrate="900", fps="30")
-    # analyzeTest(args.folderpath, bitrate="1300", fps="30")
+    analyzeTest(args.folderpath, bitrate="900", fps="30")
+    analyzeTest(args.folderpath, bitrate="1300", fps="30")
+    analyzeTest(args.folderpath, bitrate="1800", fps="30")
+    analyzeTest(args.folderpath, bitrate="2700", fps="30")
+    analyzeTest(args.folderpath, bitrate="4000", fps="30")
+    analyzeTest(args.folderpath, bitrate="4750", fps="30")
+    analyzeTest(args.folderpath, bitrate="6000", fps="30")
