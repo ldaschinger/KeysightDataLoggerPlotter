@@ -147,48 +147,15 @@ def analyzeLoggerData(filepath):
     return meanC*1000
 
 
-def analyzeTest(folderpath, bitrate, fps, codec):
-
-    folderpath = folderpath + codec + "/"
-
-    folderpath_small = folderpath + bitrate + "/" + bitrate + "_small_" + fps
-    folderpath_large = folderpath + bitrate + "/" + bitrate + "_large_" + fps
-    folderpath_auto = folderpath + bitrate + "/" + bitrate + "_auto"
-
-    meanSmall = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath_small):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            meanSmall.append(analyzeLoggerData(folderpath_small + "/" + filename))
-    npMeanSmall = np.asarray(meanSmall)
-
-    meanLarge = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath_large):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            meanLarge.append(analyzeLoggerData(folderpath_large + "/" + filename))
-    npMeanLarge = np.asarray(meanLarge)
-
-    meanAuto = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath_auto):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            meanAuto.append(analyzeLoggerData(folderpath_auto + "/" + filename))
-    npMeanAuto= np.asarray(meanAuto)
-
-    print(str(format(npMeanSmall.mean(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")) + "  " +
-          str(format(npMeanLarge.mean(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + "  " +
-          str(format(npMeanAuto.mean(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")))
-
-
-def analyzeTestCustom(folderpath, bitrate, res1, fps1, codec1, res2, fps2, codec2, res3, fps3, codec3):
+def analyzeTestCustom(folderpath, bitrate, res1, fps1, codec1, res2="null", fps2="null", codec2="null",
+                      res3="null", fps3="null", codec3="null", res4="null", fps4="null", codec4="null",
+                      res5="null", fps5="null", codec5="null"):
 
     folderpath1 = folderpath + codec1 + "/" + bitrate + "/" + bitrate + res1 + fps1
     folderpath2 = folderpath + codec2 + "/" + bitrate + "/" + bitrate + res2 + fps2
     folderpath3 = folderpath + codec3 + "/" + bitrate + "/" + bitrate + res3 + fps3
+    folderpath4 = folderpath + codec4 + "/" + bitrate + "/" + bitrate + res4 + fps4
+    folderpath5 = folderpath + codec5 + "/" + bitrate + "/" + bitrate + res5 + fps5
 
     mean1 = []
     # if we have varying number of tests and therefore .csv files available we must find all in the folder
@@ -206,17 +173,43 @@ def analyzeTestCustom(folderpath, bitrate, res1, fps1, codec1, res2, fps2, codec
             mean2.append(analyzeLoggerData(folderpath2+ "/" + filename))
     npMean2 = np.asarray(mean2)
 
-    mean3 = []
-    # if we have varying number of tests and therefore .csv files available we must find all in the folder
-    for filename in os.listdir(folderpath3):
-        name, extension = os.path.splitext(filename)
-        if extension == ".csv":
-            mean3.append(analyzeLoggerData(folderpath3 + "/" + filename))
-    npMean3= np.asarray(mean3)
+    if res3 != "null":
+        mean3 = []
+        # if we have varying number of tests and therefore .csv files available we must find all in the folder
+        for filename in os.listdir(folderpath3):
+            name, extension = os.path.splitext(filename)
+            if extension == ".csv":
+                mean3.append(analyzeLoggerData(folderpath3 + "/" + filename))
+        npMean3 = np.asarray(mean3)
 
-    print(str(format(npMean1.mean(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + "  " +
-          str(format(npMean2.mean(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + "  " +
-          str(format(npMean3.mean(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + " " + str(format(npMean3.std(), ".2f")))
+    if res4 != "null":
+        mean4 = []
+        # if we have varying number of tests and therefore .csv files available we must find all in the folder
+        for filename in os.listdir(folderpath4):
+            name, extension = os.path.splitext(filename)
+            if extension == ".csv":
+                mean4.append(analyzeLoggerData(folderpath4 + "/" + filename))
+        npMean4= np.asarray(mean4)
+
+    if res5 != "null":
+        mean5 = []
+        # if we have varying number of tests and therefore .csv files available we must find all in the folder
+        for filename in os.listdir(folderpath5):
+            name, extension = os.path.splitext(filename)
+            if extension == ".csv":
+                mean5.append(analyzeLoggerData(folderpath5 + "/" + filename))
+        npMean5= np.asarray(mean5)
+
+
+    print("Installing XXX...      ", end="", flush=True)
+    print("Installing XXX...      ", end="", flush=True)
+    print("Installing XXX...      ", end="", flush=True)
+    print("Installing XXX...      ")
+    # print(str(format(npMean1.mean(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + " " + str(format(npMean1.std(), ".2f")) + "  " +
+    #       str(format(npMean2.mean(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + " " + str(format(npMean2.std(), ".2f")) + "  " +
+    #       str(format(npMean3.mean(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + " " + str(format(npMean3.std(), ".2f")) + "  " +
+    #       str(format(npMean4.mean(), ".2f")) + " " + str(format(npMean4.std(), ".2f")) + " " + str(format(npMean4.std(), ".2f")) + "  " +
+    #       str(format(npMean5.mean(), ".2f")) + " " + str(format(npMean5.std(), ".2f")) + " " + str(format(npMean5.std(), ".2f")))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -277,8 +270,3 @@ if __name__ == '__main__':
                       res1="_small_", fps1="30", codec1="VP8",
                       res2="_large_", fps2="30", codec2="VP8",
                       res3="_auto_", fps3="30", codec3="VP8")
-
-# 393.97 1.70 1.70  395.17 1.83 1.83  528.60 6.01 6.01
-# 420.69 3.44 3.44  417.66 5.52 5.52  549.50 12.62 12.62
-# 469.42 6.64 6.64  516.00 0.63 0.63  634.53 20.53 20.53
-# 554.48 5.02 5.02  567.56 3.47 3.47  646.25 5.85 5.85
