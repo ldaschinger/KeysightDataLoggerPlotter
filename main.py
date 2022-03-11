@@ -12,6 +12,7 @@ __email__ = "ldaschinger@student.ethz.ch"
 
 
 import getopt
+import os
 import sys
 
 import numpy as np
@@ -146,6 +147,51 @@ def analyzeLoggerData(filepath):
     return meanC*1000
 
 
+def analyzeTest(folderpath, bitrate, fps):
+    folderpath_small = folderpath + bitrate + "_small_" + fps
+    folderpath_large = folderpath + bitrate + "_large_" + fps
+    folderpath_auto = folderpath + bitrate + "_auto"
+
+    # for a fixed number of csv files
+    # for i in range(4):
+    #     filepath = folderpath_small + "/" + "dlog" + str(i+1) + ".csv"
+    #     meanSmall.append(analyzeLoggerData(filepath))
+
+    meanSmall = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            meanSmall.append(analyzeLoggerData(folderpath_small + "/" + filename))
+    npMeanSmall = np.asarray(meanSmall)
+
+    meanLarge = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            meanLarge.append(analyzeLoggerData(folderpath_large + "/" + filename))
+    npMeanLarge = np.asarray(meanLarge)
+
+    meanAuto = []
+    # if we have varying number of tests and therefore .csv files available we must find all in the folder
+    for filename in os.listdir(folderpath):
+        name, extension = os.path.splitext(filename)
+        if extension == ".csv":
+            meanAuto.append(analyzeLoggerData(folderpath_auto + "/" + filename))
+    npMeanAuto= np.asarray(meanAuto)
+
+    print(str(format(npMeanSmall.mean(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")) + "  " +
+          str(format(npMeanLarge.mean(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + " " + str(format(npMeanLarge.std(), ".2f")) + "  " +
+          str(format(npMeanAuto.mean(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")) + " " + str(format(npMeanAuto.std(), ".2f")))
+
+    # # pass the filepath to the analysis function
+    # mean1 = analyzeLoggerData(args.folderpath + "dlog1.csv")
+    # mean2 = analyzeLoggerData(args.folderpath + "dlog2.csv")
+    # mean3 = analyzeLoggerData(args.folderpath + "dlog3.csv")
+    # mean4 = analyzeLoggerData(args.folderpath + "dlog4.csv")
+    # meanCurrents = np.array([mean1, mean2, mean3, mean4])
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--folderpath",
@@ -162,27 +208,7 @@ if __name__ == '__main__':
             dlog1.csv/dlog2.csv/dlog3.csv/dlog4.csv
     """
 
-    bitrate = "300"
-    fps = "30"
-
-    folderpath_small = args.folderpath + bitrate + "_small_" + fps
-    folderpath_large = args.folderpath + bitrate + "_large_" + fps
-    folderpath_auto = args.folderpath + bitrate + "_auto_"
-
-    meanSmall = []
-    for i in range(4):
-        filepath = folderpath_small + "/" + "dlog" + str(i+1) + ".csv"
-        meanSmall.append(analyzeLoggerData(filepath))
-
-    print(meanSmall)
-    npMeanSmall = np.asarray(meanSmall)
-    print(npMeanSmall.mean())
-
-    print(str(format(npMeanSmall.mean(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")) + " " + str(format(npMeanSmall.std(), ".2f")))
-
-    # # pass the filepath to the analysis function
-    # mean1 = analyzeLoggerData(args.folderpath + "dlog1.csv")
-    # mean2 = analyzeLoggerData(args.folderpath + "dlog2.csv")
-    # mean3 = analyzeLoggerData(args.folderpath + "dlog3.csv")
-    # mean4 = analyzeLoggerData(args.folderpath + "dlog4.csv")
-    # meanCurrents = np.array([mean1, mean2, mean3, mean4])
+    analyzeTest(args.folderpath, bitrate="300", fps="30")
+    analyzeTest(args.folderpath, bitrate="600", fps="30")
+    # analyzeTest(args.folderpath, bitrate="900", fps="30")
+    # analyzeTest(args.folderpath, bitrate="1300", fps="30")
